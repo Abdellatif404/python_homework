@@ -15,55 +15,64 @@ board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
 
 
 def tic_tac_toe():
+    print('Welcome to Tic Tac Toe!')
     player = 'first'
-    symbol = input('first player select your symbol (X or O):\t')
+    symbol = input('Player1: select your symbol (X or O):\t')
 
     while symbol.upper() not in 'XO':
         print('Please choose X or O')
         symbol = input('Try again:\t')
 
-    while game_state():
-        selected_number = input(f'{player} player select a number (1-9):\t')
+    while game_on():
+        position = input(f'{player} player select your position (1-9):\t')
 
-        if selected_number.isdigit() and 0 < int(selected_number) < 10:
-            if board[int(selected_number) - 1] == ' ':
-                board[int(selected_number) - 1] = symbol.upper()
+        if position.isdigit() and 0 < int(position) < 10:
 
+            if board[int(position) - 1] == ' ':
+                board[int(position) - 1] = symbol.upper()
                 print_board()
 
-                if not game_state():
+                if not game_on():
                     print(f'CONGRATULATIONS: The {player} player WON')
 
-                if symbol.upper() == 'X':
-                    symbol = 'O'
-                else:
-                    symbol = 'X'
-                if player == 'first':
-                    player = 'second'
-                else:
-                    player = 'first'
+                symbol = reset_info(symbol.upper(), 'X', 'O')
+                player = reset_info(player, 'second', 'first')
 
 
-def game_state():
-    game_on = True
-    win_indexes = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
-    for win_list in win_indexes:
-        if check_rows(win_list):
-            game_on = False
+def game_on():
+    winner_positions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+    for positions in winner_positions:
+        if check_win(positions):
+            return False
 
-    return game_on
+    return True
 
 
-def check_rows(ls):
-    if board[ls[0]] == board[ls[1]] == board[ls[2]] == 'X' or board[ls[0]] == board[ls[1]] == board[ls[2]] == 'O':
-        return True
-    return False
+def check_win(ls):
+    x_win = 0
+    o_win = 0
+
+    for position in ls:
+        if board[position] == 'X':
+            x_win += 1
+        elif board[position] == 'O':
+            o_win += 1
+
+    return x_win == 3 or o_win == 3
 
 
 def print_board():
     print(f'{board[6]} | {board[7]} | {board[8]}'
           f'\n{board[3]} | {board[4]} | {board[5]}'
           f'\n{board[0]} | {board[1]} | {board[2]}')
+
+
+def reset_info(info, old, instead):
+    if info == old:
+        info = instead
+    else:
+        info = old
+    return info
 
 
 tic_tac_toe()
