@@ -1,23 +1,12 @@
-# Your assignment: Create a Tic Tac Toe game. You are free to use any IDE you like.
-#
-# Here are the requirements:
-#
-# 2 players should be able to play the game (both sitting at the same computer)
-# 1\ The board should be printed out every time a player makes a move
-# 2\ You should be able to accept input of the player position and then place a symbol on the board
-# Feel free to use Google to help you figure anything out (but don't just Google "Tic Tac Toe in
-# Python" otherwise you won't learn anything!) Keep in mind that this project can take anywhere
-# between several hours to several days.
-#
-# HAVE FUN!
 
-board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+
+board = [' ']*9
 
 
 def tic_tac_toe():
     print('Welcome to Tic Tac Toe!')
     player = 'first'
-    symbol = input('Player1: select your symbol (X or O):\t')
+    symbol = input('Player 1: select your symbol X or O:\t')
 
     while symbol.upper() not in 'XO':
         print('Please choose X or O')
@@ -42,23 +31,17 @@ def tic_tac_toe():
 def game_on():
     winner_positions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
     for positions in winner_positions:
-        if check_win(positions):
+        if check_win(positions[0], positions[1], positions[2]):
             return False
 
     return True
 
 
-def check_win(ls):
-    x_win = 0
-    o_win = 0
-
-    for position in ls:
-        if board[position] == 'X':
-            x_win += 1
-        elif board[position] == 'O':
-            o_win += 1
-
-    return x_win == 3 or o_win == 3
+def check_win(p1, p2, p3):
+    
+    if board[p1] == board[p2] == board[p3] == 'X' or board[p1] == board[p2] == board[p3] == 'O':
+        return True
+    return False
 
 
 def print_board():
@@ -67,12 +50,12 @@ def print_board():
           f'\n{board[0]} | {board[1]} | {board[2]}')
 
 
-def reset_info(info, old, instead):
-    if info == old:
-        info = instead
+def reset_info(variable, old_value, new_value):
+    if variable == old_value:
+        variable = new_value
     else:
-        info = old
-    return info
+        variable = old_value
+    return variable
 
 
 tic_tac_toe()
