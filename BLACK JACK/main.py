@@ -3,10 +3,9 @@ import player
 
 
 class Blackjack:
-    bet = 0
     bets = [5, 10, 25, 50, 100]
-    human = player.Player(bets)
-    computer = player.Player(bets)
+    human = player.Player('Player', bets)
+    computer = player.Player('Dealer', bets)
 
     def draw_gameplay(self):
         dealer_cards = self.computer.cards
@@ -29,7 +28,7 @@ class Blackjack:
             money = self.human.money
 
             if user_input.isdigit() and int(user_input) in self.bets and int(user_input) <= money:
-                self.bet = int(user_input)
+                self.human.bet = int(user_input)
                 break
             else:
                 print('Try again')
@@ -42,7 +41,7 @@ class Blackjack:
             print('PUSH')
             return True
         elif player_cards < dealer_cards:
-            print(self.bet)
+            print(self.human.bet)
             print('')
             print('LOSE')
             return True
@@ -52,7 +51,7 @@ class Blackjack:
         while True:
             self.computer.hit(self.pick_card())
             self.draw_gameplay()
-            if computer.check_bust() or computer.check_blackjack() or self.compare():
+            if computer.check_blackjack_and_bust() or self.compare():
                 return True
             else:
                 continue
@@ -61,12 +60,12 @@ class Blackjack:
         game_on = True
         while game_on:
             choice = input('H for hit or S for stand:').capitalize()
-            if self.human.check_blackjack() or self.computer.check_blackjack():
+            if self.human.check_blackjack_and_bust() or self.computer.check_blackjack_and_bust():
                 game_on = False
             if choice == 'H':
                 self.human.hit(self.pick_card())
                 self.draw_gameplay()
-                if self.human.check_bust() or self.human.check_blackjack():
+                if self.human.check_blackjack_and_bust():
                     game_on = False
             elif choice == 'S':
                 if self.compare() or self.dealer_roll():
